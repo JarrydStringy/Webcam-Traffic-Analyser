@@ -1,5 +1,10 @@
 .App {
   text-align: center;
+  min-height: 100vh;
+  margin: 10;
+
+  display: grid;
+  grid-template-rows: auto 1fr auto;
 }
 
 .App-header {
@@ -18,14 +23,12 @@
 }
 
 header {
-  background: #087386;
+  background: #290ec5;
   color: #fff;
   padding: 30px 30px;
 }
 
 footer {
-  /* position: absolute; */
-  bottom: 0;
   width: 100%;
   background: #222;
   padding: 30px;
@@ -73,4 +76,18 @@ nav ul li a:hover {
 .header-name {
   text-align: left;
   size: 10;
+}
+
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 50%;
+}
+
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     GoogleMap, useLoadScript
 } from '@react-google-maps/api';
@@ -6,12 +6,13 @@ import mapStyles from "../mapStyles"
 
 const libraries = ["places"];
 const mapContainerStyle = {
-    width: "100vw",
-    height: "100vh",
+    width: "75vw",
+    height: "70vh",
 };
+// Centred about Brisbane
 const center = {
-    lat: 0,
-    lng: 0,
+    lat: -27.4705,
+    lng: 153.0260,
 };
 const options = {
     styles: mapStyles,
@@ -19,8 +20,16 @@ const options = {
     zoomControl: true,
 };
 
-
 export default function MapView() {
+    const [traffic, setTraffic] = useState(null);
+
+    useEffect(() => {
+        fetch("/api/traffic")
+            .then(res => res.json())
+            .then(res => setTraffic(res))
+            .catch(() => null);
+    }, []);
+
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
         libraries,
@@ -34,14 +43,12 @@ export default function MapView() {
     if (!isLoaded) return "Loading Maps...";
 
     return (
-        <div>
-            <GoogleMap
-                mapContainerStyle={mapContainerStyle}
-                zoom={2}
-                center={center}
-                options={options}
-                onLoad={onMapLoad}
-            />
-        </div>
+        <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            zoom={11}
+            center={center}
+            options={options}
+            onLoad={onMapLoad}
+        />
     );
 }
