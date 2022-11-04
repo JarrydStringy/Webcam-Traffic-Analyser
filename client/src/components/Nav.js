@@ -10,10 +10,10 @@ export default function Nav() {
                     <Link to="/">Home</Link>
                 </li>
                 <li>
-                    <Link to="/results">Results</Link>
+                    <Link to="/results/1">Results</Link>
                 </li>
                 <li>
-                    <Link to="/api/traffic/current">Traffic API</Link>
+                    <Link to="/api/traffic/current/1">Traffic API</Link>
                 </li>
             </ul>
         </nav >

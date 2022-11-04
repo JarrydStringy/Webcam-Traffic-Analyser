@@ -4,17 +4,19 @@ const axios = require("axios");
 
 const HISTORY_URL = "http://linca2highlb-2116519164.ap-southeast-2.elb.amazonaws.com/";
 const CURRENT_URL = "http://linca2highlb-2116519164.ap-southeast-2.elb.amazonaws.com/current/";
-const id = 1;
 
-router.get('/current', async (req, res) => {
+//Returns current data for id
+router.get('/current/:id', async (req, res) => {
+    const id = req.params['id'];
     const url = CURRENT_URL + id;
-    try {
-        const traffic = await axios.get(url)
 
+    try {
+        const traffic = await axios.get(url);
         res.json({
             results: traffic.data
         })
-        console.log(traffic)
+        console.log(traffic.data)
+
     } catch (err) {
         if (err.response) {
             console.log(err.response.data)
@@ -28,15 +30,18 @@ router.get('/current', async (req, res) => {
     }
 });
 
-router.get('/', async (req, res) => {
+//Returns data stored for id
+router.get('/history/:id', async (req, res) => {
+    const id = req.params['id'];
     const url = HISTORY_URL + id;
-    try {
-        const traffic = await axios.get(url)
 
+    try {
+        const traffic = await axios.get(url);
         res.json({
             results: traffic.data
         })
-        console.log(traffic)
+        console.log(traffic.data)
+
     } catch (err) {
         if (err.response) {
             console.log(err.response.data)
@@ -48,6 +53,14 @@ router.get('/', async (req, res) => {
             console.error('Error', err.message)
         }
     }
+});
+
+//Used to display the table on the home page.  Data does not change
+router.get('/all', function (req, res, next) {
+    const data = require('../webcam_payload_all.json');
+    res.json(
+        data.features
+    );
 });
 
 module.exports = router;

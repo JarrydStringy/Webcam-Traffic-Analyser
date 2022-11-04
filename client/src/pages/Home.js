@@ -1,59 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
-import { useData } from "../Api";
 
 const columns = [
-    { headerName: "Date", field: "date", sortable: true, filter: true },
-    { headerName: "Locality", field: "locality", sortable: true, filter: true },
-    { headerName: "Direction", field: "direction", sortable: true, filter: true },
-    { headerName: "Postcode", field: "postcode", sortable: true, filter: true },
-    { headerName: "Count", field: "count", sortable: true, filter: true }
+    { headerName: "Suburb", field: "locality", sortable: true, filter: true },
+    { headerName: "Area", field: "district", sortable: true, filter: true },
+    { headerName: "Direction Facing", field: "direction", sortable: true, filter: true },
+    { headerName: "Postcode", field: "postcode", sortable: true, filter: true }
 ]
 
 export default function Home() {
-    // const { traffic } = useData()
-
-    const [traffic, setTraffic] = useState(null);
+    const navigate = useNavigate();
+    const [data, setData] = useState(null);
 
     useEffect(() => {
-        fetch("/api/traffic/current")
+        fetch("/api/traffic/all")
             .then(res => res.json())
-            .then(res => setTraffic(res))
+            .then(res => setData(res))
             .catch(() => null);
     }, []);
 
-    console.log(traffic);
+    console.log(data);
 
     return (
-        <div className="Test">
+        <div className="Home">
             <h2>QLD Traffic Webcam Analyser</h2>
-            <div class="row">
-                <div class="column">
-                    <div
-                        className="ag-theme-balham"
-                        style={{
-                            height: "400px",
-                            width: "650px",
-                            alignContent: "center"
-                        }}
-                    >
-                        <AgGridReact
-                            columnDefs={columns}
-                            rowData={traffic}
-                            pagination={true}
-                            paginationPageSize={12}
-                        />
-                    </div>
-                </div>
-                <div class="column">
-                    <h4>Description</h4>
-                    <p>
-                        A cloud-based react-express application that uses the QLD traffic webcams in combination with OpenCV and GoogleMaps to display traffic volumes.
-                    </p>
-                </div>
+            <p>
+                A cloud-based react-express application that uses the QLD
+                traffic webcams in combination with OpenCV and GoogleMaps
+                to display traffic volumes.  Click an item in the table to
+                see volume of cars at location.
+            </p>
+            <div
+                className="ag-theme-balham"
+                style={{
+                    height: "600px",
+                    width: "820px",
+                    alignContent: "center"
+                }}
+            >
+                <AgGridReact
+                    columnDefs={columns}
+                    rowData={data}
+                    pagination={true}
+                    paginationPageSize={19}
+                    onRowClicked={(row) => navigate(
+                        `/results/${row.data.id}`
+                    )}
+                />
             </div>
         </div>
     );
 }
+
+// `/api/traffic/current/${row.data.id}`
